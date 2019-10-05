@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 // import HelloWorld from '@/components/HelloWorld';
-import Dashboard from '@/components/dashboard';
+import Dashboard from '@/components/Dashboard';
 import Login from '@/components/pages/Login';
 import Products from '@/components/pages/Products';
 
@@ -13,7 +13,7 @@ export default new VueRouter({
     routes: [
         {
             path: '*',
-            redirect: '/login'
+            redirect: 'login'
         },
         // {
         //     name: 'HelloWorld',
