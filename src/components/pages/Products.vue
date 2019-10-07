@@ -21,8 +21,8 @@
           <td class="text-right">{{ item.origin_price | currency }}</td>
           <td class="text-right">{{ item.price | currency }}</td>
           <td>
-            <span v-if="item.is_enabled" class="text-success">啟用</span>
-            <span>未起用</span>
+            <span v-if="item.is_enabled === 1" class="text-success">啟用</span>
+            <span v-else class="text-muted">未起用</span>
           </td>
           <td>
             <button class="btn btn-outline-primary btn-sm" @click="openModal(false, item)">編輯</button>

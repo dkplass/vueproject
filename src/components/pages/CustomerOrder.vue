@@ -38,7 +38,7 @@
     </div>
 
     <!-- 購物車清單 -->
-    <Cartlist :cartdata="cartdata"></Cartlist>
+    <Cartlist :cartdata="cartdata" @emitCartItemId="removeCartItem" @couponCode="addCouponCode" v-if="cartdata.carts && cartdata.carts.length"></Cartlist>
 
     <!-- 單一商品彈窗 -->
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
@@ -147,6 +147,28 @@ export default {
       this.$http.get(url).then(response => {                
         vm.cartdata = response.data.data;
         console.log(vm.cartdata);
+        vm.isLoading = false;
+      });
+    },
+    removeCartItem(id) {
+      const vm = this;
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart/${id}`;
+      vm.isLoading = true;
+      this.$http.delete(url).then(response => {                                  
+        vm.isLoading = false;
+        vm.getCart();
+      });
+    },
+    addCouponCode(couponCode) {
+      const vm = this;
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/coupon`;
+      const coupon = {
+        code: couponCode
+      }
+      vm.isLoading = true;
+      this.$http.post(url, { data: coupon }).then(response => {     
+        console.log(response);                             
+        vm.getCart();
         vm.isLoading = false;
       });
     }

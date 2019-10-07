@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import Dashboard from '@/components/Dashboard';
 import Login from '@/components/pages/Login';
 import Products from '@/components/pages/Products';
+import Coupons from '@/components/pages/Coupons';
 
 import CustomerOrder from '@/components/pages/CustomerOrder';
 
@@ -35,6 +36,12 @@ export default new VueRouter({
                     path: 'products',
                     name: 'Products',
                     component: Products,
+                    meta: { requiresAuth: true },
+                },
+                {
+                    path: 'coupons',
+                    name: 'Coupons',
+                    component: Coupons,
                     meta: { requiresAuth: true },
                 }
             ],
