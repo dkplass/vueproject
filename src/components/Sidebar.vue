@@ -15,7 +15,7 @@
             </router-link> 
           </li>  
           <li class="nav-item">            
-            <router-link class="nav-link" to="">
+            <router-link class="nav-link" to="/admin/orders">
               <i class="fas fa-list-alt fa-fw pr-2"></i>訂單列表
             </router-link> 
           </li> 

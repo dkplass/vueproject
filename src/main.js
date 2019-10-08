@@ -4,6 +4,10 @@ import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import Loading from 'vue-loading-overlay';
+import { i18n } from "./i18n";
+import "./vee-validate";
+
+
 import 'vue-loading-overlay/dist/vue-loading.css';
 import 'bootstrap';
 
@@ -18,11 +22,14 @@ axios.defaults.withCredentials = true;
 Vue.use(VueAxios, axios);
 
 Vue.component('Loading', Loading);
+
 Vue.filter('currency', currencyFilter);
 Vue.filter('date', dateFilter);
 
+
 /* eslint-disable no-new */
 new Vue({
+  i18n,
   el: '#app',
   components: { App },
   template: '<App/>',
