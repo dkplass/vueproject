@@ -285,22 +285,26 @@ export default {
       vm.isLoading = true;
       const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/order`;
 
-      this.$refs.observer.validate().then(isValid => {
+      this.$refs.observer.validate().then((isValid) => {
         if (isValid) {
-          this.$http.post(url, { data: order }).then(response => {
-            console.log("訂單已建立", response);
+          this.$http.post(url, { data: order }).then((response) => {            
+            console.log("訂單已建立");
             vm.isLoading = false;
 
-            vm.form.user = {
-              name: "",
-              email: "",
-              tel: "",
-              address: ""
-            };
+            if(response.data.success) {
+              vm.$router.push(`/customer_checkout/${response.data.orderId}`);
+            }
+
+            // vm.form.user = {
+            //   name: "",
+            //   email: "",
+            //   tel: "",
+            //   address: ""
+            // };
             
-            requestAnimationFrame(() => {
-              this.$refs.observer.reset();
-            });
+            // requestAnimationFrame(() => {
+            //   this.$refs.observer.reset();
+            // });
             
           });
         } else {
