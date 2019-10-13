@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-// import HelloWorld from '@/components/HelloWorld';
+import Site from '@/components/Site';
+import Home from '@/components/pages/Home';
+
 import Dashboard from '@/components/Dashboard';
 import Login from '@/components/pages/Login';
 import Products from '@/components/pages/Products';
@@ -18,12 +20,18 @@ export default new VueRouter({
             path: '*',
             redirect: 'login'
         },
-        // {
-        //     name: 'HelloWorld',
-        //     path: '/',
-        //     component: HelloWorld,
-        //     meta: { requiresAuth: true },
-        // },
+        {
+            name: 'Site',
+            path: '/',
+            component: Site, 
+            children: [
+                {
+                    path: 'home',
+                    name: 'Home',
+                    component: Home,
+                }
+            ]           
+        },
         {
             name: 'Login',
             path: '/login',

@@ -43,7 +43,7 @@
   </div>
 </template>
 
-<style scoped>
+<style scope>
 .nav {
   font-size: 1rem;
 }
