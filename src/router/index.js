@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Site from '@/components/Site';
-import Home from '@/components/pages/Home';
 
 import Dashboard from '@/components/Dashboard';
 import Login from '@/components/pages/Login';
@@ -18,17 +16,36 @@ export default new VueRouter({
     routes: [
         {
             path: '*',
-            redirect: 'login'
+            redirect: '/home'
         },
         {
             name: 'Site',
             path: '/',
-            component: Site, 
+            component: () => import('../components/Site.vue'),            
             children: [
                 {
-                    path: 'home',
+                    path: '/home',
                     name: 'Home',
-                    component: Home,
+                    component: () => import('../components/pages/Home.vue'),                     
+                    meta: {
+                        title: 'Trend',
+                    }
+                },
+                {
+                    path: '/shop',
+                    name: 'Shop',
+                    component: () => import('../components/pages/Shop.vue'),
+                    meta: {
+                        title: 'Trend - 商店',
+                        breadcrumb: [{
+                            name: '首頁',
+                            link: '/home'
+                        },
+                        {
+                            name: '線上商店',
+                            link: '/shop'
+                        }]
+                    }
                 }
             ]           
         },

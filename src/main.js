@@ -7,7 +7,6 @@ import Loading from 'vue-loading-overlay';
 import { i18n } from "./i18n";
 import "./vee-validate";
 
-
 import 'vue-loading-overlay/dist/vue-loading.css';
 import 'bootstrap';
 
@@ -37,6 +36,7 @@ new Vue({
 });
 
 router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
   console.log("to: ", to," from: ", from," next: ", next);
   if(to.meta.requiresAuth) {
     const api = `${process.env.APIPATH}/api/user/check`;	    		

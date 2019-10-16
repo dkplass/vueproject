@@ -16,9 +16,10 @@
             </h5>
             <p class="card-text">{{ item.content }}</p>
             <div class="d-flex justify-content-between align-items-baseline">
-              <div class="h5" v-if="!item.price">{{ item.origin_price }} 元</div>
-              <del class="h6" v-if="item.price">原價 {{ item.origin_price }} 元</del>
-              <div class="h5" v-if="item.price">現在只要 {{ item.price }} 元</div>
+              <!-- <div class="h5" v-if="!item.price">{{ item.origin_price }} 元</div> -->
+              <div class="h5" v-if="item.price == item.origin_price">{{ item.origin_price }} 元</div>
+              <del class="h6" v-if="item.price !== item.origin_price">原價 {{ item.origin_price }} 元</del>
+              <div class="h5" v-if="item.price !== item.origin_price">現在只要 {{ item.price }} 元</div>
             </div>
           </div>
           <div class="card-footer d-flex">
@@ -287,7 +288,8 @@ export default {
 
       this.$refs.observer.validate().then((isValid) => {
         if (isValid) {
-          this.$http.post(url, { data: order }).then((response) => {            
+          this.$http.post(url, { data: order }).then((response) => {     
+            this.$bus.$emit("message:push", "訂單已建立", "success");       
             console.log("訂單已建立");
             vm.isLoading = false;
 

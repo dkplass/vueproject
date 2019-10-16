@@ -19,8 +19,8 @@
 							已套用優惠卷
 						</div>
 					</td>
-					<td width="60" class="align-middle">{{ item.qty }}</td>
-					<td width="60" class="align-middle text-right">{{ item.product.price | currency }}</td>
+					<td width="60" class="align-middle">{{ item.qty }}/{{ item.product.unit }}</td>
+					<td width="60" class="align-middle text-right">{{ item.final_total | currency }}</td>
 				</tr>
 			</tbody>
 			<tfoot>
