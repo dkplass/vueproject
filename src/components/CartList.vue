@@ -5,9 +5,9 @@
 			<thead>
 				<tr>
 					<th scope="col"></th>
-					<th scope="col">品名</th>
-					<th scope="col">數量</th>
-					<th scope="col">單價</th>
+					<th scope="col text-center">品名</th>
+					<th scope="col text-center">數量</th>
+					<th scope="col text-center">單價</th>
 				</tr>
 			</thead>
 			<tbody>

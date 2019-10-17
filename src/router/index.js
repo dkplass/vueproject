@@ -20,7 +20,7 @@ export default new VueRouter({
         },
         {
             name: 'Site',
-            path: '/',
+            path: '/home',
             component: () => import('../components/Site.vue'),            
             children: [
                 {
@@ -45,6 +45,30 @@ export default new VueRouter({
                             name: '線上商店',
                             link: '/shop'
                         }]
+                    }
+                },
+                {
+                    path: '/shop/:productId',
+                    name: 'Product',
+                    component: () => import('../components/pages/Product.vue'),
+                    meta: {
+                        title: '商品頁面',
+                        breadcrumb: [{
+                            name: '首頁',
+                            link: '/home'
+                        },
+                        {
+                            name: '線上商店',
+                            link: '/shop'
+                        }]
+                    }
+                },
+                {
+                    path: '/pay',
+                    name: 'Pay',
+                    component: () => import('../components/pages/Pay.vue'),
+                    meta: {
+                        title: '結帳頁面',                        
                     }
                 }
             ]           

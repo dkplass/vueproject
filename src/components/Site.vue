@@ -32,9 +32,9 @@
 					</li>						
 				</ul>
 				<div class="btn-group mx-2 cart">
-					<router-link to="" class="btn cart-btn">
+					<router-link to="/pay" class="btn cart-btn">
 						<i class="fas fa-shopping-cart fa-lg"></i>
-						<span class="badge badge-pill badge-danger customize-badge">0</span>
+						<span class="badge badge-pill badge-danger customize-badge"><CartQty></CartQty></span>
 					</router-link>											
 				</div>
 				<div class="btn-group mx-2 setting">
@@ -102,11 +102,13 @@
 <script>
 import $ from "jquery";
 import Alert from './AlertMessage';
+import CartQty from './Countcart'
 
 export default {
 	components: {		
-    Alert,
-	}
+		Alert,
+		CartQty
+	},	
 }
 </script>
 

@@ -2,37 +2,38 @@
 	<div>
 		<loading :active.sync="isLoading"></loading>
 		<div class="container">			
-			<Breadcrumb :category="category"></Breadcrumb>
+			<div class="col-12">
+				<Breadcrumb :category="category"></Breadcrumb>				
+				<form class="form-inline input-group mb-3 search" @submit.prevent="search">
+          <input type="text" class="form-control" placeholder="search" v-model="searchText">
+          <div class="input-group-append">
+            <button class="input-group-text bg-light">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </form>
+			</div>			
 			<div class="category-tab w-100">
 				<ul class="col-12 nav nav-pills nav-fill">					
-					<li class="col-3 py-2 nav-item" >
+					<li class="col-3 py-2 nav-item"
+						v-for="(categoryTab, index) in categories" :key="index">
 						<a class="category-tab-link" 
-							href="#"
-							:class="{'active' : category == '全部'}"
-							@click.prevent="category = '全部'">全部</a>						
-					</li>
-					<li class="col-3 py-2 nav-item">
-						<a class="category-tab-link" 
-							href="#"
-							:class="{'active' : category == '上衣'}"
-							@click.prevent="category = '上衣'">上衣</a>
-					</li>
-					<li class="col-3 py-2 nav-item">
-						<a class="category-tab-link" 
-							href="#"
-							:class="{'active' : category == '褲裝'}"
-							@click.prevent="category = '褲裝'">褲裝</a>
-					</li>
-					<li class="col-3 py-2 nav-item">
-						<a class="category-tab-link" 
-							href="#"
-							:class="{'active' : category == '鞋類'}"
-							@click.prevent="category = '鞋類'">鞋類</a>
-					</li>					
-				</ul>
+							href="#/shop"
+							:class="{'active': category == categoryTab.title}"
+							@click="getCategory(categoryTab.title)">{{ categoryTab.title }}</a>						
+					</li>									
+				</ul>				
 			</div>
 			<div class="row mt-4">
-				<div class="col-md-4 mb-4" v-for="item in showActiveProduct" :key="item.id">
+				<div class="col-12 my-2 text-left text-muted"  v-if="filter">
+					<span v-if="filterProducts.length === 0">
+						未找到任何有關 "{{ filter }}" 的商品
+					</span>
+					<span v-else>
+						總共找到 {{ filterProducts.length }} 樣有關 "{{ filter }}" 的商品
+					</span>
+				</div>				
+				<div class="col-md-4 mb-4" v-for="item in filterProducts" :key="item.id">
 					<div class="card h-100 border-0 shadow-sm">
 						<div
 							style="height: 250px; background-size: cover; background-position: center"
@@ -46,7 +47,7 @@
 							<p class="card-text">{{ item.content }}</p>
 							<div class="d-flex justify-content-between align-items-baseline">
 								<div class="h5" v-if="item.price == item.origin_price">{{ item.origin_price }} 元</div>
-              	<del class="h6" v-if="item.price !== item.origin_price">原價 {{ item.origin_price }} 元</del>
+              	<div class="h6" v-if="item.price !== item.origin_price">原價 {{ item.origin_price }} 元</div>
               	<div class="h5" v-if="item.price !== item.origin_price">現在只要 {{ item.price }} 元</div>
 							</div>
 						</div>
@@ -62,7 +63,7 @@
 							<button
 								type="button"
 								class="btn btn-outline-danger btn-sm ml-auto"
-								@click="addtoCart(item.id)"
+								@click.prevent="addToCart(item.id, qty)"
 							>
 								<i class="fas fa-spinner fa-spin" v-if="status.loadingItem === item.id"></i>
 								加到購物車
@@ -85,15 +86,21 @@ export default {
 	},	
 	data() {
     return {
-			products: [],
-			showProducts: [],			
-			category: "全部",
+			products: [],			
 			breadcrumb: [],
-      tempProduct: {},
-      isNew: false,
+			filter: '',
+			categories: [
+        { title: '全部' },
+        { title: '上衣' },
+        { title: '褲裝' },
+        { title: '鞋類', },        
+			],
+			category: '全部',
+			searchText: '',
+      product: {},      
       isLoading: false,
       status: {
-        fileUploading: false
+        loadingItem: ""
 			},
 			scrollReveal: scrollReveal() //註冊 scrollReveal
     };
@@ -101,70 +108,58 @@ export default {
 	methods: {
     getProducts() {
       const vm = this;
-      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/products/all`;
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products/all`;
       vm.isLoading = true;
-      this.$http.get(url).then((response) => {											
-				vm.products = Object.values(response.data.products).map(item => item);	        
+      this.$http.get(url).then((response) => {													
+				vm.products = response.data.products;				
 				vm.isLoading = false;								
       });
-		}
+		},
+		getProduct(id) {
+			const vm = this;			
+			vm.$router.push(`/shop/${id}`);	
+		},
+		getCategory(category) {
+      const vm = this;
+			vm.category = category;
+			
+      if (vm.filter) {
+        vm.filter = '';
+			}			
+    },
+		search() {
+			const vm = this;
+      vm.filter = vm.searchText;
+			vm.searchText = '';						
+		},
+		addToCart(id, n = 1) {
+      const vm = this;
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;      
+      const cart = {
+        product_id: id,
+        qty: n
+      };
+      this.$http.post(url, { data: cart }).then(response => {
+				this.$bus.$emit("message:push", `${response.data.message}`, "success");        
+				this.$bus.$emit("cartQty:refresh");
+      });
+		},
 	},
 	computed: {
-		showActiveProduct() {
-			const vm = this;	
-			vm.isLoading = true;	
+		filterProducts() {
+			const vm = this;			
 
-			if(vm.category === "上衣") {
-				vm.showProducts.length = 0;
-
-				vm.products.forEach(function(item, index) {        
-					if (item.is_enabled === 1 && item.category === "上衣") {            
-						vm.showProducts.push(item);
-					}								
-				});
-
-				vm.isLoading = false;	
-
-				return vm.showProducts;
-
-			} else if(vm.category === "褲裝") {
-				vm.showProducts.length = 0;
-
-				vm.products.forEach(function(item, index) {        
-					if (item.is_enabled === 1 && item.category === "褲裝") {            
-						vm.showProducts.push(item);
-					}								
-				});
-
-				vm.isLoading = false;	
-
-				return vm.showProducts;
-			} else if(vm.category === "鞋類") {
-				vm.showProducts.length = 0;
-
-				vm.products.forEach(function(item, index) {        
-					if (item.is_enabled === 1 && item.category === "鞋類") {            
-						vm.showProducts.push(item);
-					}								
-				});
-
-				vm.isLoading = false;	
-
-				return vm.showProducts;
-			} else {
-				vm.showProducts.length = 0;	
-
-				vm.products.forEach(function(item, index) {        
-					if (item.is_enabled === 1) {            
-						vm.showProducts.push(item);
-					}								
-				});	
-				
-				vm.isLoading = false;	
-
-				return vm.showProducts;
-			}			
-		},		
+      if (vm.filter) {
+				vm.category = '全部';					
+        return vm.products.filter(item => item.title.indexOf(vm.filter) !== -1);
+			}
+			
+      if (vm.category !== '全部') {				
+        return vm.products.filter(item => item.category === vm.category);
+			}
+												
+			return vm.products;						
+    },			
 	},
 	created() {
 		this.getProducts();  		
@@ -204,6 +199,7 @@ export default {
 			line-height: 2rem;	
 			color: #5a5a5a;
 			padding: .4rem .6rem;
+			margin: 0 auto;
 			cursor: pointer;
 			border-bottom: 1px solid rgb(143, 130, 96);
 			z-index: 2;			
@@ -217,8 +213,8 @@ export default {
 				left: 0;			
 				background-color: rgb(143, 130, 96);	
 				z-index: -1;
-				-webkit-transform: translateX(-100%);
-								transform: translateX(-100%);
+				-webkit-transform: translateX(-102%);
+								transform: translateX(-102%);
 				transition: all .5s;
 			}
 
@@ -247,5 +243,9 @@ export default {
 		}
 	}
 	
+}
+
+.search {	
+	margin: .6rem 0		
 }
 </style>

@@ -6,8 +6,8 @@
 					v-for="(breadcrumb, key) in breadcrumbList"
 					:key="key"
 					@click="routeTo(key)"
-					:class="{'active': breadcrumb.link}">{{ breadcrumb.name }}</li>
-				<li class="breadcrumb-item active" v-if="category">{{ category }}</li>				
+					:class="{'active': breadcrumb.link}">{{ breadcrumb.name }}</li>			
+				<li class="breadcrumb-item active" v-if="category">{{ category }}</li>								
 			</ol>
 		</nav>
 	</div>
