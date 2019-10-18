@@ -40,10 +40,11 @@
     <div class="container">
       <div class="category my-4">
         <ul class="list">
-          <li class="item text-center col-sm-3 col-3">全部商品</li>
-          <li class="item text-center col-sm-3 col-3">上衣</li>
-          <li class="item text-center col-sm-3 col-3">褲裝</li>
-          <li class="item text-center col-sm-3 col-3">鞋類</li>
+          <li class="item text-center col-sm-3 col-3"
+            v-for="(category, key) in categories" :key="key"
+            @click.prevent="goCategory(category.title)">
+            {{ category.title }}            
+          </li>          
         </ul>
       </div>
 			<section class="index-content mt-4 text-center">
@@ -94,7 +95,13 @@ export default {
     return {      
       form: {
         email: "",
-      },      
+      },
+      categories: [
+        { title: '全部' },
+        { title: '上衣' },
+        { title: '褲裝' },
+        { title: '鞋類', },        
+			],      
     };
   },
   methods: {
@@ -106,7 +113,15 @@ export default {
           this.$bus.$emit("message:push", "電子郵件格式不符合", "danger");                    
         }
       });
+    },
+    goCategory(categoryTitle) {
+      const vm = this;
+      vm.$router.push({ path: '/shop', query: { category: categoryTitle } });
     }
+  },
+  created() {
+    this.$bus.$emit("cartQty:refresh");
+    this.$bus.$emit("favorite:refresh");
   }
 };
 </script>

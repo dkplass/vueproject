@@ -42,12 +42,11 @@ router.beforeEach((to, from, next) => {
     const api = `${process.env.APIPATH}/api/user/check`;	    		
     axios.post(api).then(response => {
       console.log(response.data);
-      if(response.data.success) {
-        // vm.$router.push("/");
+      if(response.data.success) {        
         next();
       } else {
         next({
-          path: '/login',
+          path: '/home',
         });
       }
     });

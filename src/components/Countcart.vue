@@ -13,12 +13,9 @@ export default {
 	methods: {
     updateQty() {
 			const vm = this;
-      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
-      vm.isLoading = true;
-      this.$http.get(url).then(response => {
-				// vm.cartdata = response.data.data.carts;    
-				vm.cartQty = response.data.data.carts.length;				
-        vm.isLoading = false;
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;      
+      this.$http.get(url).then(response => {				
+				vm.cartQty = response.data.data.carts.length;				        
       });
 		}
 	},

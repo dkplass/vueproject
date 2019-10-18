@@ -7,7 +7,12 @@
       </div>
       <div class="row">
         <div class="col-lg-6 mx-auto">
-          <div class="text-center">
+          <div class="image text-center">
+            <div class="image-layer">
+              <a href="#" class="float-right" @click.prevent="addFavorite()"> 
+                <i class="favorite-icon" :class="favoriteClass"></i>                              
+              </a>
+            </div>
             <img :src="product.imageUrl" class="w-100" alt />
           </div>
         </div>
@@ -98,20 +103,21 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isLoading: false,      
       product: {},
       productId: "",
-      qty: 1
+      qty: 1,
+      favoriteLocalStorage: JSON.parse(localStorage.getItem("favoriteStoredId")) || [],  
+      heartClass: "far fa-heart",
     };
   },
-  methods: {
+  methods: {   
     getProduct() {
       const vm = this;
       const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/product/${vm.productId}`;
       vm.isLoading = true;
       this.$http.get(url).then(response => {
-        vm.product = response.data.product;
-        console.log(vm.product);
+        vm.product = response.data.product;        
         vm.isLoading = false;
       });
 		},
@@ -126,19 +132,78 @@ export default {
 				this.$bus.$emit("message:push", `${response.data.message}`, "success");        
 				this.$bus.$emit("cartQty:refresh");
       });
+    },
+    addFavorite() {
+      const vm = this;          
+      let $id = vm.product.id;      
+      let result = vm.favoriteLocalStorage.map(function(productItem){
+        return productItem
+      }).indexOf($id);      
+
+      if(result === -1) {
+        // 變更最愛按鈕樣式
+        vm.heartClass = "fas fa-heart"; 
+
+        // 將此商品ID存進localstorage
+        vm.favoriteLocalStorage.push(vm.product.id);
+        localStorage.setItem("favoriteStoredId", JSON.stringify(vm.favoriteLocalStorage));        
+      } else {
+        // 變更最愛按鈕樣式
+        vm.heartClass = "far fa-heart";
+
+        // 將此商品ID從localstorage刪除
+        vm.favoriteLocalStorage.splice((result), 1);
+        localStorage.setItem("favoriteStoredId", JSON.stringify(vm.favoriteLocalStorage));        
+      }   
+            
+      this.$bus.$emit("favorite:refresh");	 
+    }		
+  },
+  computed: {
+    favoriteClass() {  
+      const vm = this;  
+          
+      let result = vm.favoriteLocalStorage.map((favoriteItem) => {
+        return favoriteItem
+      }).indexOf(vm.productId);  
+            
+      if (result > -1) {         
+        return vm.heartClass = "fas fa-heart"
+      } else {                           
+        return vm.heartClass = "far fa-heart"
+      }
+
+      return vm.heartClass
 		},		
   },
-  created() {
-    this.productId = this.$route.params.productId;
-		this.getProduct();		
-  }
+  created() {  
+    this.productId = this.$route.params.productId;    
+    this.getProduct();  
+    this.$bus.$emit("favorite:refresh");	       	       
+  }  
 };
 </script>
 
-<style scope>
+<style lang="scss" scope>
 .btn-customize {
   color: #fff;
   background-color: #8f8260;
   border-color: #8f8260;
 }
+
+.image {
+  position: relative;
+  .image-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  .favorite-icon {
+    font-size: 2rem;
+    color: #8f8260;
+    margin: .4rem;    
+  }
+}
+
 </style>

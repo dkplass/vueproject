@@ -119,6 +119,12 @@ export default {
 			const vm = this;			
 			vm.$router.push(`/shop/${id}`);	
 		},
+		getQuery() {
+			const vm = this;
+      if (vm.$route.query.category) {
+        vm.category = vm.$route.query.category;
+      }
+    },
 		getCategory(category) {
       const vm = this;
 			vm.category = category;
@@ -162,7 +168,9 @@ export default {
     },			
 	},
 	created() {
-		this.getProducts();  		
+		this.getQuery();
+		this.getProducts();
+		this.$bus.$emit("favorite:refresh");  		
 	},
 	updated() {
 		this.scrollReveal.reveal('.card', {

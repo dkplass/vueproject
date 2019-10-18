@@ -31,6 +31,9 @@
 						<router-link to="" class="nav-link">優惠卷</router-link>							
 					</li>						
 				</ul>
+				<div class="btn-group mx-2 favorite">
+					<Favorite></Favorite>															
+				</div>
 				<div class="btn-group mx-2 cart">
 					<router-link to="/pay" class="btn cart-btn">
 						<i class="fas fa-shopping-cart fa-lg"></i>
@@ -38,7 +41,7 @@
 					</router-link>											
 				</div>
 				<div class="btn-group mx-2 setting">
-					<router-link to="" class="btn cart-btn">									
+					<router-link to="/login" class="btn cart-btn">									
 						<i class="fas fa-cog fa-lg"></i>					
 					</router-link>	
 				</div>					
@@ -102,13 +105,15 @@
 <script>
 import $ from "jquery";
 import Alert from './AlertMessage';
-import CartQty from './Countcart'
+import CartQty from './Countcart';
+import Favorite from './Favorite';
 
 export default {
 	components: {		
 		Alert,
-		CartQty
-	},	
+		CartQty,
+		Favorite
+	}
 }
 </script>
 

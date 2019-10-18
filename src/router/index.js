@@ -105,7 +105,7 @@ export default new VueRouter({
         },
         {
             name: 'Dashboard_CustomerOrder',
-            path: '/',
+            path: '/customer',
             component: Dashboard,            
             children: [
                 {
