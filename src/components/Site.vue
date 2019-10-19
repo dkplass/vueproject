@@ -28,7 +28,7 @@
 						<router-link to="/shop" class="nav-link">線上商店</router-link>								
 					</li>
 					<li class="nav-item">
-						<router-link to="" class="nav-link">優惠卷</router-link>							
+						<router-link to="/events" class="nav-link">優惠活動</router-link>							
 					</li>						
 				</ul>
 				<div class="btn-group mx-2 favorite">

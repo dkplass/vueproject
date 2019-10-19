@@ -70,6 +70,22 @@ export default new VueRouter({
                     meta: {
                         title: '結帳頁面',                        
                     }
+                },
+                {
+                    path: '/events',
+                    name: 'Events',
+                    component: () => import('../components/pages/Events.vue'),
+                    meta: {
+                        title: '優惠活動', 
+                        breadcrumb: [{
+                            name: '首頁',
+                            link: '/home'
+                        },
+                        {
+                            name: '優惠活動',
+                            link: '/events'
+                        }]                       
+                    }
                 }
             ]           
         },
