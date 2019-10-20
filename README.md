@@ -1,10 +1,18 @@
 # vueproject
 
-> 是電子商務網站
+> 電子商務網站實作練習專案
 
 # Demo
 
-> |1|[Trend](https://dkplass.github.io/vueproject/dist/#/home)
+> [Trend](https://dkplass.github.io/vueproject/dist/#/home)
+
+# 介紹
+
+> 前台
+#### 效果
+* 昵称：果冻虾仁
+- 别名：隔壁老王
+* 英文名：Jelly
 
 ## Build Setup
 
