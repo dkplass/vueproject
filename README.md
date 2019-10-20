@@ -1,6 +1,10 @@
 # vueproject
 
-> A Vue.js project
+> 是電子商務網站
+
+# Demo
+
+> |1|[Trend](https://dkplass.github.io/vueproject/dist/#/home)
 
 ## Build Setup
 
